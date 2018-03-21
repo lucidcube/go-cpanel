@@ -58,9 +58,9 @@ func (c *Connection) WHMCall(call string, params url.Values) ([]byte, error) {
 }
 
 // GetLoginURL retrieves c-panel 'magic link' to log user directly into the control panel
-func (c *Connection) GetLoginURL(user string) (string, error) {
+func (c *Connection) GetLoginURL() (string, error) {
 	params := url.Values{}
-	params.Add("user", user)
+	params.Add("user", c.user)
 	params.Add("service", "cpaneld")
 	body, err := c.WHMCall("create_user_session", params)
 	log.Print(err, string(body))
