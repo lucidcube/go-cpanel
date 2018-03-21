@@ -4,6 +4,7 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -63,9 +64,7 @@ func (c *Connection) GetLoginURL() (string, error) {
 	params.Add("user", c.user)
 	params.Add("service", "cpaneld")
 	body, err := c.WHMCall("create_user_session", params)
-	log.Print(err, string(body))
 	if err != nil {
-		log.Print(err, string(body))
 		return "", err
 	}
 	response := &CreateUserSessionResponse{}
@@ -77,32 +76,32 @@ func (c *Connection) GetLoginURL() (string, error) {
 	return response.Data.URL, nil
 }
 
-func (c *Connection) MakeUAPICall(user, module, function string, args *url.Values) ([]byte, error) {
-	if args == nil {
-		args = &url.Values{}
+func (c *Connection) GetStats() ([]StatResponse, error) {
+	params := url.Values{}
+	params.Add("user", c.user)
+	params.Add("service", "cpaneld")
+
+	params.Add("display", "bandwidthusage")
+	body, err := c.MakeUAPICall("StatsBar", "get_stats", params)
+	if err != nil {
+		return []StatResponse{}, err
 	}
-	args.Add("cpanel_jsonapi_user", user)
+	response := &StatsResponse{}
+
+	fmt.Printf("BODY:%s\n", body)
+	err = json.Unmarshal(body, response)
+	if err != nil {
+		log.Print(err)
+		return []StatResponse{}, err
+	}
+	return response.Stats, nil
+}
+
+// MakeUAPICall creates calls to UAPI
+func (c *Connection) MakeUAPICall(module, function string, args url.Values) ([]byte, error) {
+	args.Add("cpanel_jsonapi_user", c.user)
 	args.Add("cpanel_jsonapi_module", module)
 	args.Add("cpanel_jsonapi_func", function)
 	args.Add("cpanel_jsonapi_apiversion", "3")
-	return c.WHMCall("cpanel", *args)
-}
-
-type BaseWhmApiResponse struct {
-	Metadata struct {
-		Version int    `json:"version"`
-		Command string `json:"command"`
-		Reason  string `json:"reason"`
-	} `json:"metadata"`
-}
-
-type CreateUserSessionResponse struct {
-	BaseWhmApiResponse
-	Data struct {
-		Session       string `json:"session"`
-		Service       string `json:"service"`
-		URL           string `json:"url"`
-		SecurityToken string `json:"cp_security_token"`
-		Expires       int64  `json:"expires"`
-	} `json:"data"`
+	return c.WHMCall("cpanel", args)
 }
