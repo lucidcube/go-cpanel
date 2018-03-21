@@ -1,54 +1,68 @@
 package cpanel
 
 import (
+	"crypto/tls"
+	"encoding/json"
+	"errors"
+	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"strings"
-	"io/ioutil"
-	"encoding/json"
-	"log"
-	"crypto/tls"
 	"time"
 )
 
-var (
+// Connection is a single cpanel connection
+type Connection struct {
 	client *http.Client
 	token  string
-	User   = ""
-	Host   = ""
-)
+	user   string
+	host   string
+}
 
-func Init() {
+// New createa a new cpanel connection instance
+func New(token, user, host string) (conn Connection, err error) {
 	//Home »Development »Manage API Tokens
-	token = "PMIK472JO3JNYT6NCOA9W3V5C9UFNGBB"
-
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
-	client = &http.Client{Timeout: time.Second * 10, Transport: tr}
+
+	if token == "" || user == "" || host == "" {
+		err = errors.New("invalid connection params")
+		return
+	}
+
+	conn = Connection{
+		token:  token,
+		user:   user,
+		host:   host,
+		client: &http.Client{Timeout: time.Second * 10, Transport: tr},
+	}
+	return
 }
 
-func WhmCall(call string, params url.Values) ([]byte, error) {
-
-	uri := "https://" + Host + ":2087/json-api/" + call + "?api.version=1&" + params.Encode()
+// WHMCall makes the call to the Web Host Manager
+func (c *Connection) WHMCall(call string, params url.Values) ([]byte, error) {
+	uri := "https://" + c.host + ":2087/json-api/" + call + "?api.version=1&" + params.Encode()
 	req, err := http.NewRequest(http.MethodGet, uri, strings.NewReader(""))
 	if err != nil {
 		return []byte(""), err
 	}
-	req.Header.Add("Authorization", "whm root:"+token)
+	req.Header.Add("Authorization", "whm root:"+c.token)
 	req.Header.Set("Content-Type", "application/json")
-	resp, err := client.Do(req)
+	resp, err := c.client.Do(req)
 	if err != nil {
 		return []byte(""), err
 	}
 	return ioutil.ReadAll(resp.Body)
 }
 
-func GetLoginUrl(user string) (string, error) {
+// GetLoginURL retrieves c-panel 'magic link' to log user directly into the control panel
+func (c *Connection) GetLoginURL(user string) (string, error) {
 	params := url.Values{}
 	params.Add("user", user)
 	params.Add("service", "cpaneld")
-	body, err := WhmCall("create_user_session", params)
+	body, err := c.WHMCall("create_user_session", params)
 	log.Print(err, string(body))
 	if err != nil {
 		log.Print(err, string(body))
@@ -63,7 +77,7 @@ func GetLoginUrl(user string) (string, error) {
 	return response.Data.URL, nil
 }
 
-func MakeUAPICall(user, module, function string, args *url.Values) ([]byte, error) {
+func (c *Connection) MakeUAPICall(user, module, function string, args *url.Values) ([]byte, error) {
 	if args == nil {
 		args = &url.Values{}
 	}
@@ -71,7 +85,7 @@ func MakeUAPICall(user, module, function string, args *url.Values) ([]byte, erro
 	args.Add("cpanel_jsonapi_module", module)
 	args.Add("cpanel_jsonapi_func", function)
 	args.Add("cpanel_jsonapi_apiversion", "3")
-	return WhmCall("cpanel", *args)
+	return c.WHMCall("cpanel", *args)
 }
 
 type BaseWhmApiResponse struct {
