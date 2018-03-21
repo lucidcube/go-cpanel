@@ -23,12 +23,12 @@ func TestAPICall(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	fmt.Printf("Login: %s", r)
+	fmt.Printf("Login: %s\n", r)
 
-	r2, err := conn.GetStats()
+	r2, err := conn.GetStats(StatCollection{FTPAccounts, EmailAccounts})
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	fmt.Printf("Stats: %d", len(r2))
+	fmt.Printf("Stats: %v\n", r2)
 }

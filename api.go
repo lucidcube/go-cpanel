@@ -4,7 +4,6 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -76,25 +75,25 @@ func (c *Connection) GetLoginURL() (string, error) {
 	return response.Data.URL, nil
 }
 
-func (c *Connection) GetStats() ([]StatResponse, error) {
+// GetStats retrieves stats through UAPI
+func (c *Connection) GetStats(stats StatCollection) ([]StatResponse, error) {
 	params := url.Values{}
 	params.Add("user", c.user)
 	params.Add("service", "cpaneld")
 
-	params.Add("display", "bandwidthusage")
+	q := stats.QueryValue()
+	params.Add("display", q)
 	body, err := c.MakeUAPICall("StatsBar", "get_stats", params)
 	if err != nil {
 		return []StatResponse{}, err
 	}
 	response := &StatsResponse{}
 
-	fmt.Printf("BODY:%s\n", body)
 	err = json.Unmarshal(body, response)
 	if err != nil {
-		log.Print(err)
 		return []StatResponse{}, err
 	}
-	return response.Stats, nil
+	return response.Result.Stats, nil
 }
 
 // MakeUAPICall creates calls to UAPI
