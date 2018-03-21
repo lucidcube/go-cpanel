@@ -50,21 +50,21 @@ type StatsResponse struct {
 
 // StatResponse is a single UAPI statistic
 type StatResponse struct {
-	ZeroIsUnlimited Cbool  `json:"zeroisunlimited"`
-	Percent20       int    `json:"percent20"`
-	Percent10       int    `json:"percent10"`
-	Percent5        int    `json:"percent5"`
-	Percent         int    `json:"percent"`
-	Item            string `json:"item"`
-	Max             string `json:"max"`
-	Maxed           Cbool  `json:"_maxed"`
-	LangKey         string `json:"langkey"`
-	ID              string `json:"id"`
-	Module          string `json:"module"`
-	Count           string `json:"count"`
-	Name            string `json:"name"`
-	Normalized      Cbool  `json:"normalized"`
-	Units           string `json:"units"`
-	NearLimitPhrase string `json:"near_limit_phrase"`
-	MaxedPhrase     string `json:"maxed_phrase"`
+	ZeroIsUnlimited Cbool    `json:"zeroisunlimited"`
+	Percent20       int      `json:"percent20"`
+	Percent10       int      `json:"percent10"`
+	Percent5        int      `json:"percent5"`
+	Percent         int      `json:"percent"`
+	Item            string   `json:"item"`
+	Max             string   `json:"max"`
+	Maxed           Cbool    `json:"_maxed"`
+	LangKey         string   `json:"langkey"`
+	ID              string   `json:"id"`
+	Module          string   `json:"module"`
+	Count           string   `json:"count"`
+	StatType        StatType `json:"name"`
+	Normalized      Cbool    `json:"normalized"`
+	Units           string   `json:"units"`
+	NearLimitPhrase string   `json:"near_limit_phrase"`
+	MaxedPhrase     string   `json:"maxed_phrase"`
 }
