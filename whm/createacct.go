@@ -1,15 +1,16 @@
 package whm
 
 import (
-	"github.com/lucidcube/go-cpanel"
-	"net/url"
 	"encoding/json"
+	"net/url"
+
+	"github.com/lucidcube/go-cpanel"
 )
 
 type CreateAccountResponse struct {
 	MetaData struct {
 		Command string `json:"command"`
-		Output struct {
+		Output  struct {
 			Raw string `json:"raw"`
 		} `json:"output"`
 		Version int    `json:"version"`
@@ -49,7 +50,9 @@ func CreateAccount(username, domain string, options CreateAccountOptions) (*Crea
 	if options.Plan != "" {
 		params.Add("plan", options.Plan)
 	}
-	raw, callErr := cpanel.WhmCall("createacct", params)
+
+	conn := cpanel.Connection{}
+	raw, callErr := conn.WHMCall("createacct", params)
 	if callErr != nil {
 		return nil, callErr
 	}
