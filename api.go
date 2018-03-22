@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/url"
 	"strings"
@@ -69,31 +68,9 @@ func (c *Connection) GetLoginURL() (string, error) {
 	response := &CreateUserSessionResponse{}
 	err = json.Unmarshal(body, response)
 	if err != nil {
-		log.Print(err)
 		return "", err
 	}
 	return response.Data.URL, nil
-}
-
-// GetStats retrieves stats through UAPI
-func (c *Connection) GetStats(stats StatCollection) ([]StatResponse, error) {
-	params := url.Values{}
-	params.Add("user", c.user)
-	params.Add("service", "cpaneld")
-
-	q := stats.QueryValue()
-	params.Add("display", q)
-	body, err := c.MakeUAPICall("StatsBar", "get_stats", params)
-	if err != nil {
-		return []StatResponse{}, err
-	}
-	response := &StatsResponse{}
-
-	err = json.Unmarshal(body, response)
-	if err != nil {
-		return []StatResponse{}, err
-	}
-	return response.Result.Stats, nil
 }
 
 // MakeUAPICall creates calls to UAPI

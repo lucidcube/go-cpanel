@@ -1,7 +1,61 @@
 package cpanel
 
+import (
+	"encoding/json"
+	"net/url"
+)
+
 // StatCollection is an array of StatType
 type StatCollection []StatType
+
+// StatsResponse is response from UAPI when querying statistics
+type StatsResponse struct {
+	Result struct {
+		Stats []StatResponse `json:"data"`
+	} `json:"result"`
+}
+
+// StatResponse is a single UAPI statistic
+type StatResponse struct {
+	ZeroIsUnlimited Cbool    `json:"zeroisunlimited"`
+	Percent20       int      `json:"percent20"`
+	Percent10       int      `json:"percent10"`
+	Percent5        int      `json:"percent5"`
+	Percent         int      `json:"percent"`
+	Item            string   `json:"item"`
+	Max             string   `json:"max"`
+	Maxed           Cbool    `json:"_maxed"`
+	LangKey         string   `json:"langkey"`
+	ID              string   `json:"id"`
+	Module          string   `json:"module"`
+	Count           string   `json:"count"`
+	StatType        StatType `json:"name"`
+	Normalized      Cbool    `json:"normalized"`
+	Units           string   `json:"units"`
+	NearLimitPhrase string   `json:"near_limit_phrase"`
+	MaxedPhrase     string   `json:"maxed_phrase"`
+}
+
+// GetStats retrieves stats through UAPI
+func (c *Connection) GetStats(stats StatCollection) ([]StatResponse, error) {
+	params := url.Values{}
+	params.Add("user", c.user)
+	params.Add("service", "cpaneld")
+
+	q := stats.QueryValue()
+	params.Add("display", q)
+	body, err := c.MakeUAPICall("StatsBar", "get_stats", params)
+	if err != nil {
+		return []StatResponse{}, err
+	}
+	response := &StatsResponse{}
+
+	err = json.Unmarshal(body, response)
+	if err != nil {
+		return []StatResponse{}, err
+	}
+	return response.Result.Stats, nil
+}
 
 // QueryValue returns contained values as a single query parameter
 func (sc StatCollection) QueryValue() string {
