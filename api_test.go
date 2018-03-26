@@ -58,4 +58,11 @@ func TestAPICalls(t *testing.T) {
 		t.Fatal(err)
 	}
 	fmt.Printf("\nEmail accounts: %v\n", r3)
+
+	// Files
+	r4, err := conn.GetDirectoryFileListing("")
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Printf("Files: %d\n", len(r4))
 }
