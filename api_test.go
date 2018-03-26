@@ -65,4 +65,11 @@ func TestAPICalls(t *testing.T) {
 		t.Fatal(err)
 	}
 	fmt.Printf("Files: %d\n", len(r4))
+
+	// Disk usage
+	r5, err := conn.GetDiskUsage()
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Printf("Disk Usage contents: %d\n", len(r5.Data))
 }
