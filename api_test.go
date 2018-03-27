@@ -27,8 +27,8 @@ func TestAPICalls(t *testing.T) {
 
 	fmt.Printf("\nLogin: %s\n", r)
 
-	// Stats
-	r2, err := conn.GetStats(StatCollection{FTPAccounts, EmailAccounts})
+	// Account Stats
+	r2, err := conn.GetAccountStats(AccountStatCollection{FTPAccounts, EmailAccounts})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -49,7 +49,7 @@ func TestAPICalls(t *testing.T) {
 		t.Fatal("Did not result in expected stats")
 	}
 
-	fmt.Printf("\nStats: %v\n", r2)
+	fmt.Printf("\nAccount Stats: %v\n", r2)
 
 	// Email
 
@@ -71,5 +71,13 @@ func TestAPICalls(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	fmt.Printf("Disk Usage contents: %d\n", len(r5.Data))
+	fmt.Printf("Disk Usage contents: %d\n", len(r5.CPanelResult.Data))
+
+	// Site stats
+	r6, err := conn.GetStatSites()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	fmt.Printf("AWSites: %d\n", len(r6))
 }

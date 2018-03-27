@@ -5,18 +5,18 @@ import (
 	"net/url"
 )
 
-// StatCollection is an array of StatType
-type StatCollection []StatType
+// AccountStatCollection is an array of StatType
+type AccountStatCollection []StatType
 
-// StatsResponse is response from UAPI when querying statistics
-type StatsResponse struct {
+// AccountStatsResponse is response from UAPI when querying statistics
+type AccountStatsResponse struct {
 	Result struct {
-		Stats []StatResponse `json:"data"`
+		Stats []AccountStatResponse `json:"data"`
 	} `json:"result"`
 }
 
-// StatResponse is a single UAPI statistic
-type StatResponse struct {
+// AccountStatResponse is a single UAPI statistic
+type AccountStatResponse struct {
 	ZeroIsUnlimited Cbool    `json:"zeroisunlimited"`
 	Percent20       int      `json:"percent20"`
 	Percent10       int      `json:"percent10"`
@@ -36,8 +36,9 @@ type StatResponse struct {
 	MaxedPhrase     string   `json:"maxed_phrase"`
 }
 
-// GetStats retrieves stats through UAPI
-func (c *Connection) GetStats(stats StatCollection) ([]StatResponse, error) {
+// GetAccountStats retrieves stats through UAPI
+// account stats are stats relating to the users hosting
+func (c *Connection) GetAccountStats(stats AccountStatCollection) ([]AccountStatResponse, error) {
 	params := url.Values{}
 	params.Add("user", c.user)
 	params.Add("service", "cpaneld")
@@ -46,19 +47,19 @@ func (c *Connection) GetStats(stats StatCollection) ([]StatResponse, error) {
 	params.Add("display", q)
 	body, err := c.MakeUAPICall("StatsBar", "get_stats", params)
 	if err != nil {
-		return []StatResponse{}, err
+		return []AccountStatResponse{}, err
 	}
-	response := &StatsResponse{}
+	response := &AccountStatsResponse{}
 
 	err = json.Unmarshal(body, response)
 	if err != nil {
-		return []StatResponse{}, err
+		return []AccountStatResponse{}, err
 	}
 	return response.Result.Stats, nil
 }
 
 // QueryValue returns contained values as a single query parameter
-func (sc StatCollection) QueryValue() string {
+func (sc AccountStatCollection) QueryValue() string {
 	if len(sc) == 0 {
 		return ""
 	}
