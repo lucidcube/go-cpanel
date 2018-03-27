@@ -55,32 +55,34 @@ func (c *Connection) GetDirectoryFileListing(directory string) ([]DirectoryItem,
 // DiskUsageResponse response from disk usage query
 type DiskUsageResponse struct {
 	BaseWhmAPIResponse
-	Data []struct {
-		MailArchives  int64  `json:"mailarchives"`
-		SkipMailMan   string `json:"skipMailman"`
-		MailAccounts  int64  `json:"mailaccounts"`
-		MailMan       int64  `json:"mailman"`
-		QuotaUsed     int64  `json:"quotaused"`
-		HomeDirectory struct {
-			Usage              int64  `json:"usage"`
-			ContainedUsage     int64  `json:"contained_usage"`
-			Owner              string `json:"owner"`
-			UserContainedUsage int64  `json:"user_contained_usage"`
-			Name               string `json:"name"`
-			Traversible        Cbool  `json:"traversible"`
-			Type               string `json:"dir"`
-			Contents           []struct {
+	CPanelResult struct {
+		Data []struct {
+			MailArchives  int64  `json:"mailarchives"`
+			SkipMailMan   string `json:"skipMailman"`
+			MailAccounts  int64  `json:"mailaccounts"`
+			MailMan       int64  `json:"mailman"`
+			QuotaUsed     int64  `json:"quotaused"`
+			HomeDirectory struct {
 				Usage              int64  `json:"usage"`
-				ContainedUsage     int64  `json:"quotaused"`
-				Owner              string `json:"contained_usage"`
+				ContainedUsage     int64  `json:"contained_usage"`
+				Owner              string `json:"owner"`
 				UserContainedUsage int64  `json:"user_contained_usage"`
-				Contents           int64  `json:"contents"`
-				Traversible        Cbool  `json:"traversible"`
 				Name               string `json:"name"`
-				Type               string `json:"type"`
-			}
-		} `json:"homedir"`
-	} `json:"data"`
+				Traversible        Cbool  `json:"traversible"`
+				Type               string `json:"dir"`
+				Contents           []struct {
+					Usage              int64  `json:"usage"`
+					ContainedUsage     int64  `json:"contained_usage"`
+					Owner              string `json:"owner"`
+					UserContainedUsage int64  `json:"user_contained_usage"`
+					Contents           int64  `json:"contents"`
+					Traversible        Cbool  `json:"traversible"`
+					Name               string `json:"name"`
+					Type               string `json:"type"`
+				}
+			} `json:"homedir"`
+		} `json:"data"`
+	} `json:"cpanelresult"`
 }
 
 // GetDiskUsage retrieves the account's disk space usage data.
