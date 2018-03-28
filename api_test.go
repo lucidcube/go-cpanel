@@ -80,4 +80,14 @@ func TestAPICalls(t *testing.T) {
 	}
 
 	fmt.Printf("AWSites: %d\n", len(r6))
+
+	// Create email account
+	r7, err := conn.CreateEmailAccount("qwe@provtest.com", "WQE1242!#!@")
+	if err != nil {
+		if err.Error() != "The account qwe@provtest.com already exists!" {
+			t.Fatal(err)
+		}
+	}
+
+	fmt.Printf("Created email address: %v\n", r7)
 }
