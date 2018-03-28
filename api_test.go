@@ -90,4 +90,12 @@ func TestAPICalls(t *testing.T) {
 	}
 
 	fmt.Printf("Created email address: %v\n", r7)
+
+	// Domain listing
+	r8, err := conn.GetDomainListing()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	fmt.Printf("Domains: %d\n", len(r8))
 }
