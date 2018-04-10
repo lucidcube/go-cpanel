@@ -1,12 +1,11 @@
-package whm
+package cpanel
 
 import (
 	"encoding/json"
 	"net/url"
-
-	"github.com/lucidcube/go-cpanel"
 )
 
+// CreateAccountResponse raw response from CreateAccount
 type CreateAccountResponse struct {
 	MetaData struct {
 		Command string `json:"command"`
@@ -35,12 +34,14 @@ type CreateAccountResponse struct {
 	} `json:"data"`
 }
 
+// CreateAccountOptions are account creation parameters used when calling CreateAccount
 type CreateAccountOptions struct {
 	Plan     string
 	Password string
 }
 
-func CreateAccount(username, domain string, options CreateAccountOptions) (*CreateAccountResponse, error) {
+// CreateAccount through WHM
+func (c *Connection) CreateAccount(username, domain string, options CreateAccountOptions) (*CreateAccountResponse, error) {
 	params := url.Values{}
 	params.Add("username", username)
 	params.Add("domain", domain)
@@ -51,8 +52,7 @@ func CreateAccount(username, domain string, options CreateAccountOptions) (*Crea
 		params.Add("plan", options.Plan)
 	}
 
-	conn := cpanel.Connection{}
-	raw, callErr := conn.WHMCall("createacct", params)
+	raw, callErr := c.WHMCall("createacct", params)
 	if callErr != nil {
 		return nil, callErr
 	}
