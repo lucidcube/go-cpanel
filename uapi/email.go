@@ -1,18 +1,10 @@
-package cpanel
+package uapi
 
 import (
 	"encoding/json"
 	"errors"
 	"net/url"
 )
-
-// AccountEmailsResponse response from list user email accounts query
-type AccountEmailsResponse struct {
-	BaseWhmAPIResponse
-	Data struct {
-		Pops []string `json:"pops"`
-	} `json:"data"`
-}
 
 // EmailCreateResponse response from creating a new email address
 type EmailCreateResponse struct {
@@ -46,21 +38,4 @@ func (c *Connection) CreateEmailAccount(address, password string) (bool, error) 
 	}
 
 	return false, err
-}
-
-// GetEmailAccountList retrieves cPanel account’s email accounts listing
-func (c *Connection) GetEmailAccountList() ([]string, error) {
-	params := url.Values{}
-	params.Add("user", c.user)
-	body, err := c.WHMCall("list_pops_for", params)
-	if err != nil {
-		return []string{}, err
-	}
-
-	response := &AccountEmailsResponse{}
-	err = json.Unmarshal(body, response)
-	if err != nil {
-		return []string{}, err
-	}
-	return response.Data.Pops, nil
 }

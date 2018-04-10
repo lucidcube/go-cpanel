@@ -1,4 +1,4 @@
-package cpanel
+package whm
 
 import (
 	"encoding/json"

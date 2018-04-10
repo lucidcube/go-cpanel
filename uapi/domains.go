@@ -1,4 +1,4 @@
-package cpanel
+package uapi
 
 import (
 	"encoding/json"

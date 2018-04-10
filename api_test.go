@@ -4,6 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"testing"
+
+	"github.com/lucidcube/go-cpanel/uapi"
+	"github.com/lucidcube/go-cpanel/whm"
 )
 
 const (
@@ -21,7 +24,7 @@ func TestAPICalls(t *testing.T) {
 	}
 
 	// Login URL
-	r, err := conn.GetLoginURL()
+	r, err := conn.WHM.GetLoginURL()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -29,7 +32,7 @@ func TestAPICalls(t *testing.T) {
 	fmt.Printf("\nLogin: %s\n", r)
 
 	// Account Stats
-	r2, err := conn.GetAccountStats(AccountStatCollection{FTPAccounts, EmailAccounts})
+	r2, err := conn.UAPI.GetAccountStats(uapi.AccountStatCollection{uapi.FTPAccounts, uapi.EmailAccounts})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -39,9 +42,9 @@ func TestAPICalls(t *testing.T) {
 
 	for _, i := range r2 {
 		switch i.StatType {
-		case FTPAccounts:
+		case uapi.FTPAccounts:
 			gotFTP = true
-		case EmailAccounts:
+		case uapi.EmailAccounts:
 			gotEmail = true
 		}
 	}
@@ -54,28 +57,28 @@ func TestAPICalls(t *testing.T) {
 
 	// Email
 
-	r3, err := conn.GetEmailAccountList()
+	r3, err := conn.WHM.GetEmailAccountList()
 	if err != nil {
 		t.Fatal(err)
 	}
 	fmt.Printf("\nEmail accounts: %v\n", r3)
 
 	// Files
-	r4, err := conn.GetDirectoryFileListing("")
+	r4, err := conn.UAPI.GetDirectoryFileListing("")
 	if err != nil {
 		t.Fatal(err)
 	}
 	fmt.Printf("Files: %d\n", len(r4))
 
 	// Disk usage
-	r5, err := conn.GetDiskUsage()
+	r5, err := conn.WHM.GetDiskUsage()
 	if err != nil {
 		t.Fatal(err)
 	}
 	fmt.Printf("Disk Usage contents: %d\n", len(r5.CPanelResult.Data))
 
 	// Site stats
-	r6, err := conn.GetStatSites()
+	r6, err := conn.WHM.GetStatSites()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -83,7 +86,7 @@ func TestAPICalls(t *testing.T) {
 	fmt.Printf("AWSites: %d\n", len(r6))
 
 	// Create email account
-	r7, err := conn.CreateEmailAccount("qwe@provtest.com", "WQE1242!#!@")
+	r7, err := conn.UAPI.CreateEmailAccount("qwe@provtest.com", "WQE1242!#!@")
 	if err != nil {
 		if err.Error() != "The account qwe@provtest.com already exists!" {
 			t.Fatal(err)
@@ -93,7 +96,7 @@ func TestAPICalls(t *testing.T) {
 	fmt.Printf("Created email address: %v\n", r7)
 
 	// Domain listing
-	r8, err := conn.GetDomainListing()
+	r8, err := conn.UAPI.GetDomainListing()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -106,7 +109,7 @@ func TestCreateAccountResponse(t *testing.T) {
 	"nameservera3":null,"nameservera2":null,"package":"default","nameserverentry":null,"ip":"123.123.123.123","nameserverentry3":null,"nameserver3":"","nameservera4":null,"nameservera":null,
 	"nameserverentry4":null,"nameserverentry2":null,"nameserver":"ns1.lucidcube.com"}}`
 
-	resp := &CreateAccountResponse{}
+	resp := &whm.CreateAccountResponse{}
 	decodeErr := json.Unmarshal([]byte(rawResponse), resp)
 	if decodeErr != nil {
 		t.Fail()

@@ -1,13 +1,15 @@
-package cpanel
+package whm
 
 import (
 	"encoding/json"
 	"net/url"
+
+	"github.com/lucidcube/go-cpanel/response"
 )
 
 // AWStatDomainsResponse response from list for AWDomain listing
 type AWStatDomainsResponse struct {
-	BaseWhmAPIResponse
+	response.BaseWhmAPIResponse
 	CPanelResult struct {
 		Data []AWDomain `json:"data"`
 	} `json:"cpanelresult"`
@@ -15,10 +17,10 @@ type AWStatDomainsResponse struct {
 
 // AWDomain is a single domain that has stats available
 type AWDomain struct {
-	SSL    Cbool  `json:"ssl"`
-	Lang   string `json:"lang"`
-	TXT    string `json:"txt"`
-	Domain string `json:"domain"`
+	SSL    response.Cbool `json:"ssl"`
+	Lang   string         `json:"lang"`
+	TXT    string         `json:"txt"`
+	Domain string         `json:"domain"`
 }
 
 // GetStatSites retrieves listing of websites that have available stats
