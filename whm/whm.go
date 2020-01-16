@@ -3,6 +3,7 @@ package whm
 import (
 	"crypto/tls"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"strings"
@@ -27,6 +28,9 @@ func (c *Connection) WHMCall(call string, params url.Values) ([]byte, error) {
 
 	req.Header.Add("Authorization", "WHM "+c.user+":"+c.token)
 	req.Header.Set("Content-Type", "application/json")
+
+	log.Print("Calling WHM: ", uri)
+
 	resp, err := c.client.Do(req)
 	if err != nil {
 		return []byte(""), err
