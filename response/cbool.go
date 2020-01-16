@@ -15,7 +15,7 @@ func (b *Cbool) UnmarshalJSON(d []byte) error {
 	} else if s == "0" || s == "false" || s == "\"\"" {
 		*b = false
 	} else {
-		return fmt.Errorf("Cannot unmarshal %s to Cbool", s)
+		return fmt.Errorf("cannot unmarshal %s to Cbool", s)
 	}
 	return nil
 }

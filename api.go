@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/lucidcube/go-cpanel/uapi"
-	"github.com/lucidcube/go-cpanel/whm"
+	"github.com/LucidCube/go-cpanel/uapi"
+	"github.com/LucidCube/go-cpanel/whm"
 )
 
 // Connection is a single cpanel connection
@@ -16,7 +16,7 @@ type Connection struct {
 
 // New createa a new cpanel connection instance
 func New(token, user, host string) (conn Connection, err error) {
-	//Home »Development »Manage API Tokens
+	// Home »Development »Manage API Tokens
 	if token == "" || user == "" || host == "" {
 		err = errors.New("invalid connection params")
 		return

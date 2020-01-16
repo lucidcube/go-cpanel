@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/lucidcube/go-cpanel/whm"
+	"github.com/LucidCube/go-cpanel/whm"
 )
 
 // Connection is a single user connection to UAPI

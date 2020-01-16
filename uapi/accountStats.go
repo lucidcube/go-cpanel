@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/url"
 
-	"github.com/lucidcube/go-cpanel/response"
+	"github.com/LucidCube/go-cpanel/response"
 )
 
 // AccountStatCollection is an array of StatType
