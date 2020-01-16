@@ -25,7 +25,7 @@ func (c *Connection) WHMCall(call string, params url.Values) ([]byte, error) {
 		return []byte(""), err
 	}
 
-	req.Header.Add("Authorization", "whm root:"+c.token)
+	req.Header.Add("Authorization", "WHM "+c.user+":"+c.token)
 	req.Header.Set("Content-Type", "application/json")
 	resp, err := c.client.Do(req)
 	if err != nil {

@@ -7,6 +7,7 @@ import (
 
 // CreateAccountResponse raw response from CreateAccount
 type CreateAccountResponse struct {
+	Raw      string
 	MetaData struct {
 		Command string `json:"command"`
 		Output  struct {
@@ -58,6 +59,7 @@ func (c *Connection) CreateAccount(username, domain string, options CreateAccoun
 	}
 
 	resp := &CreateAccountResponse{}
-	decodeErr := json.Unmarshal([]byte(raw), resp)
+	resp.Raw = string(raw)
+	decodeErr := json.Unmarshal(raw, resp)
 	return resp, decodeErr
 }
