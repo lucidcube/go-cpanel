@@ -12,9 +12,9 @@ type SuspendUserResponse struct {
 }
 
 // Suspend suspends a users account
-func (c *Connection) Suspend(reason string) (*SuspendUserResponse, error) {
+func (c *Connection) Suspend(username, reason string) (*SuspendUserResponse, error) {
 	params := url.Values{}
-	params.Add("user", c.user)
+	params.Add("user", username)
 	params.Add("reason", reason)
 	body, err := c.WHMCall("suspendacct", params)
 	if err != nil {
@@ -31,9 +31,9 @@ type UnSuspendUserResponse struct {
 }
 
 // UnSuspend un-suspends a users account
-func (c *Connection) UnSuspend() (*UnSuspendUserResponse, error) {
+func (c *Connection) UnSuspend(username string) (*UnSuspendUserResponse, error) {
 	params := url.Values{}
-	params.Add("user", c.user)
+	params.Add("user", username)
 	body, err := c.WHMCall("unsuspendacct", params)
 	if err != nil {
 		return nil, err
