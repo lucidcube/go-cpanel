@@ -54,11 +54,11 @@ func (c *Connection) GetDiskUsage() (DiskUsageResponse, error) {
 		return DiskUsageResponse{}, err
 	}
 
-	var response DiskUsageResponse
-	err = json.Unmarshal(body, &response)
+	var resp DiskUsageResponse
+	err = json.Unmarshal(body, &resp)
 	if err != nil {
 		return DiskUsageResponse{}, err
 	}
 
-	return response, nil
+	return resp, nil
 }

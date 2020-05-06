@@ -8,3 +8,15 @@ type BaseWhmAPIResponse struct {
 		Reason  string `json:"reason"`
 	} `json:"metadata"`
 }
+
+type ExtendedBaseWhmApiResponse struct {
+	MetaData struct {
+		Command string `json:"command"`
+		Output  struct {
+			Raw string `json:"raw"`
+		} `json:"output"`
+		Version int    `json:"version"`
+		Result  int    `json:"result"`
+		Reason  string `json:"reason"`
+	} `json:"metadata"`
+}

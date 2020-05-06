@@ -24,10 +24,10 @@ func (c *Connection) GetEmailAccountList() ([]string, error) {
 		return []string{}, err
 	}
 
-	response := &AccountEmailsResponse{}
-	err = json.Unmarshal(body, response)
+	resp := &AccountEmailsResponse{}
+	err = json.Unmarshal(body, resp)
 	if err != nil {
 		return []string{}, err
 	}
-	return response.Data.Pops, nil
+	return resp.Data.Pops, nil
 }

@@ -36,11 +36,11 @@ func (c *Connection) GetStatSites() ([]AWDomain, error) {
 		return nil, err
 	}
 
-	var response AWStatDomainsResponse
-	err = json.Unmarshal(body, &response)
+	var resp AWStatDomainsResponse
+	err = json.Unmarshal(body, &resp)
 	if err != nil {
 		return nil, err
 	}
 
-	return response.CPanelResult.Data, nil
+	return resp.CPanelResult.Data, nil
 }

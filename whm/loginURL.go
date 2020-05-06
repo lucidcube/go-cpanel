@@ -28,10 +28,10 @@ func (c *Connection) GetLoginURL() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	response := &CreateUserSessionResponse{}
-	err = json.Unmarshal(body, response)
+	resp := &CreateUserSessionResponse{}
+	err = json.Unmarshal(body, resp)
 	if err != nil {
 		return "", err
 	}
-	return response.Data.URL, nil
+	return resp.Data.URL, nil
 }

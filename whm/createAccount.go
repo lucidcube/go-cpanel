@@ -2,21 +2,14 @@ package whm
 
 import (
 	"encoding/json"
+	"github.com/LucidCube/go-cpanel/response"
 	"net/url"
 )
 
 // CreateAccountResponse raw response from CreateAccount
 type CreateAccountResponse struct {
-	Raw      string
-	MetaData struct {
-		Command string `json:"command"`
-		Output  struct {
-			Raw string `json:"raw"`
-		} `json:"output"`
-		Version int    `json:"version"`
-		Result  int    `json:"result"`
-		Reason  string `json:"reason"`
-	} `json:"metadata"`
+	response.ExtendedBaseWhmApiResponse
+	Raw  string
 	Data struct {
 		IP               string `json:"ip"`
 		Package          string `json:"package"`
