@@ -6,7 +6,7 @@ import (
 	"net/url"
 )
 
-// SuspendUserResponse response from suspending a user accout
+// SuspendUserResponse response from suspending a user account
 type SuspendUserResponse struct {
 	response.ExtendedBaseWhmApiResponse
 }
