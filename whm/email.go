@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/url"
 
-	"github.com/LucidCube/go-cpanel/response"
+	"github.com/lucidcube/go-cpanel/response"
 )
 
 // AccountEmailsResponse response from list user email accounts query

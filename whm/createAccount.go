@@ -2,7 +2,7 @@ package whm
 
 import (
 	"encoding/json"
-	"github.com/LucidCube/go-cpanel/response"
+	"github.com/lucidcube/go-cpanel/response"
 	"net/url"
 )
 

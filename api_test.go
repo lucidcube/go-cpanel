@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/LucidCube/go-cpanel/uapi"
-	"github.com/LucidCube/go-cpanel/whm"
+	"github.com/lucidcube/go-cpanel/uapi"
+	"github.com/lucidcube/go-cpanel/whm"
 )
 
 const (
